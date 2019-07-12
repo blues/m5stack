@@ -8,26 +8,78 @@
 // The main menu MUST be the first entry, but the order of all others is arbitrary
 // so long as these IDs exactly match the index of the entries in the table below.
 #define MAIN_MENU       0
-#define AUX_MENU		1
+#define SETUP_MENU		1
+#define NOTECARD_MENU	2
+#define GPS_MENU		3
+#define HIDDEN_MENU		4
 
-MENU menu[] = {
+static MENU menu[] = {
     { MAIN_MENU, MAIN_MENU, "Options",
       {
-          {"This Here", NULL, showAbout, BUTTON_START},
-          {"Is Really", NULL, showAbout, BUTTON_START},
-          {"A Test >", NULL, menuActivate, AUX_MENU},
-          {"Of The Menu", NULL, showAbout, BUTTON_START},
-          {"About", NULL, showAbout, BUTTON_START},
+          {"Add a Note", NULL, actionTestAdd, BUTTON_START},
+          {"Sync With Service Now", NULL, actionTestSync, BUTTON_START},
+          {"Stay Connected", flagTestIsContinuous, actionTestToggleContinuous, BUTTON_START},
+          {"Setup >", NULL, menuActivate, SETUP_MENU},
+          {"< Back", NULL, menuBack, 0},
           ENDMENU,
       }
     },
-    { AUX_MENU, MAIN_MENU, "Test Menu",
+    { SETUP_MENU, MAIN_MENU, "Setup",
       {
-          {"Submenu One", NULL, showAbout, BUTTON_START},
-          {"Sub Two", NULL, showAbout, BUTTON_START},
-          {"Third", NULL, showAbout, BUTTON_START},
+          {"Notecard >", NULL, menuActivate, NOTECARD_MENU},
+          {"Notehub >", NULL, actionSetProductID, BUTTON_START},
+          {"GPS Mode >", NULL, menuActivate, GPS_MENU},
+          {"< Back", NULL, menuBack, 0},
+          ENDMENU,
+      }
+    },
+    { NOTECARD_MENU, SETUP_MENU, "Notecard",
+      {
+          {"About", NULL, actionAboutNotecard, BUTTON_START},
+          {"Sync Period (mins) >", 0, actionSetSyncPeriod, BUTTON_START},
+          {"Environment", NULL, actionEnv, BUTTON_START},
+          {"Factory Restore", NULL, actionFactoryRestore, BUTTON_START},
+          {"< Back", NULL, menuBack, 0},
+          ENDMENU
+      }
+    },
+    { GPS_MENU, SETUP_MENU, "GPS Mode",
+      {
+          {"Indoor (off)", flagIsLocIndoor, actionSetLocIndoor, BUTTON_START},
+          {"Mobile (on)", flagIsLocMobile, actionSetLocMobile, BUTTON_START},
+          {"Outdoor (when moved)", flagIsLocOutdoor, actionSetLocOutdoor, BUTTON_START},
+          {"Periodic (timed)", flagIsLocPeriodic, actionSetLocPeriodic, BUTTON_START},
+          {"Tracker (timed/logged)", flagIsLocTrack, actionSetLocTrack, BUTTON_START},
+          {"GPS Period (mins) >", 0, actionSetLocPeriod, BUTTON_START},
+          {"< Back", NULL, menuBack, 0},
+          ENDMENU
+      }
+    },
+    { HIDDEN_MENU, HIDDEN_MENU, "-",
+      {
+          {"Product ID", NULL, actionProductID, BUTTON_START},
           ENDMENU,
       }
     },
     ENDMENUS
 };
+
+// Process a menu button when a menu is not set
+static int menuPress(int buttonState) {
+        switch (buttonState) {
+        case BUTTON_PRESSED_U:
+        case BUTTON_PRESSED_D:
+        case BUTTON_PRESSED_L:
+        case BUTTON_PRESSED_R:
+        case BUTTON_PRESSED_S:
+            displayClear();
+            menuActivate(MAIN_MENU);
+            return 0;
+        }
+	return 0;
+}
+
+// Initialize the menu subsystem
+void menuInit() {
+    menuSet(menu, actionHome, menuPress);
+}

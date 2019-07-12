@@ -3,7 +3,7 @@
 // copyright holder including that found in the LICENSE file.
 
 // Handy utilities built upon the display primitives that handle the most common methods of presentation
-// on the Airnote, which are full-centered or bottom-line centered.
+// on the Airnote, which are full-centered or bottom-line centered
 
 #include "../../m5note.h"
 
@@ -38,17 +38,18 @@ void displayCentered(const char *text) {
 // Display the rows and update the screen
 void displayCenteredEnd() {
     int hText;
+    int wScreen, hScreen;
     displaySetFont(dispFont);
-    displayClear(false);
     displayGetFontBounds(NULL, &hText);
+    displayGetScreenBounds(&wScreen, &hScreen);
+    int cursorBaseY = ((hScreen - hText*dispRows)/2) + (hText*2)/3;
+    M5.lcd.fillRect(0, cursorBaseY-hText, wScreen, hText*dispRows, TFT_BLACK);
     for (int i=0; i<dispRows; i++) {
         if (i >= dispMaxRows)
             break;
-        int wText, wScreen, hScreen;
+        int wText;
         char *text = dispRow[i];
-        displayGetScreenBounds(&wScreen, &hScreen);
         displayGetTextExtent(text, &wText, NULL);
-        int cursorBaseY = ((hScreen - hText*dispRows)/2) + (hText*2)/3;
         displaySetCursor(wScreen/2-wText/2, cursorBaseY + i*hText);
         displayPrint(text, PRINT_TRANSPARENT);
     }
@@ -68,7 +69,7 @@ void displayCenteredBottomEnd() {
         displayGetTextExtent(text, &wText, NULL);
 		int cursorBaseY = hScreen - hText/4 - (dispRows-i-1)*hText;
 	    displaySetCursor(wScreen/2-wText/2, cursorBaseY - (hText/2));
-        displayPrint(text, PRINT_TRANSPARENT);
+        displayPrint(text, PRINT_OPAQUE);
     }
 }
 
@@ -88,5 +89,5 @@ void displayBottomLine(int font, const char *text) {
     displayGetTextExtent(text, &wText, NULL);
     int cursorBaseY = hScreen - hText/4;
     displaySetCursor(wScreen/2-wText/2, cursorBaseY);
-    displayPrint(text, PRINT_TRANSPARENT);
+    displayPrint(text, PRINT_OPAQUE);
 }

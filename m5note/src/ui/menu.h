@@ -10,7 +10,7 @@
 
 // The selection array is statically allocated, so keep this as small as you can
 // based on precisely the maximum number of entries in any menu or submenu.
-#define MAX_SELECTIONS  7
+#define MAX_SELECTIONS  8
 #define MAX_LABEL       40
 
 // Function to return flags for a given menu selection
@@ -47,13 +47,11 @@ struct MENU {
 #define MENU_POLL_MS        1000
 #define MENU_CANCEL_MS      30000
 
-// The actual menu definition
-extern MENU menu[];
-
 // Public
 int menuActivate(int newmenu);
+int menuBack(int newmenu);
 void menuDeactivate(void);
-void menuInit(menuSelectFunc fn);
+void menuSet(MENU *pMenu, menuSelectFunc fnHome, menuSelectFunc fnPress);
 void menuHomeChanged(void);
 void menuButton(int buttonState);
 unsigned menuPoll(void);

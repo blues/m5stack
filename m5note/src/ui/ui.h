@@ -11,15 +11,15 @@
 // ui.cpp
 //
 
-enum buttonEventIDs {
-    BUTTON_NONE,
-    BUTTON_START,
-    BUTTON_REFRESH,
-    BUTTON_RELEASED,
-    BUTTON_PRESSED_R,
-    BUTTON_PRESSED_L,
-    BUTTON_PRESSED_S,
-};
+#define	BUTTON_NONE			'o'
+#define	BUTTON_START		's'
+#define BUTTON_REFRESH		'r'
+#define BUTTON_RELEASED		'x'
+#define BUTTON_PRESSED_R	'R'
+#define BUTTON_PRESSED_L	'L'
+#define BUTTON_PRESSED_U	'U'
+#define BUTTON_PRESSED_D	'D'
+#define BUTTON_PRESSED_S	'S'
 
 void uiInit(void);
 bool uiIsActive(void);
@@ -40,3 +40,18 @@ void displayCenteredEnd(void);
 void displayCenteredBottomEnd(void);
 void displayCenteredLine(int font, const char *text);
 void displayBottomLine(int font, const char *text);
+
+//
+// edit-control.cpp
+//
+
+//
+// edit-control.cpp
+//
+
+#define EDIT_CHARSET_ASCII      1
+#define EDIT_CHARSET_URL        2
+#define EDIT_CHARSET_PRODUCTID  3
+#define EDIT_CHARSET_NUMERIC    4
+void editControlBegin(char *edit, int charset);
+int editControlButton(int buttonState, char *buf, int bufLen);

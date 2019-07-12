@@ -17,15 +17,14 @@ void setup() {
 
 	// Initialize the M5Stack libraries as well as the display
     uiInit();
+	menuInit();
 
-	// Perform one-time Notecard initializations
+	// Do a test transaction to see if the notecard is present
 	while (true) {
-	    J *req = NoteNewRequest("service.set");
-	    JAddStringToObject(req, "product", "ray@ozzie.net");
-	    JAddStringToObject(req, "mode", "off");
+	    J *req = NoteNewRequest("service.get");
 		if (NoteRequest(req))
 			break;
-	    displayClear(false);
+	    displayClear();
 		displayCenteredBegin(FONT_SMALL);
 		displayCentered("waiting for notecard...");
 		displayCenteredEnd();

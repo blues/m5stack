@@ -10,8 +10,8 @@
 #include "../../m5note.h"
 #include "ui.h"
 
-// The first menu item
-#define MAIN_MENU   0
+// The hard-coded menu options (see config-menu.cpp)
+static MENU *menu = NULL;
 
 // Params for where we place the menu
 #define MENU_BASE_X 0
@@ -26,6 +26,7 @@
 
 // Current menu state
 static menuSelectFunc homeFn = NULL;
+static menuSelectFunc pressFn = NULL;
 static bool menuEnabled = false;
 static long menuActivityMs;
 static MENU *menuActive = menu;
@@ -43,15 +44,17 @@ void menuActionCompleted();
 void menuActivateSelection(int newmenu, int selectionIndex);
 
 // Initialize the menu subsystem 
-void menuInit(menuSelectFunc fn) {
-    homeFn = fn;
+void menuSet(MENU *pMenu, menuSelectFunc fnHome, menuSelectFunc fnPress) {
+	menu = pMenu;
+    homeFn = fnHome;
+	pressFn = fnPress;
     menuHomeChanged();
 }
 
 // Activate a captured selection
 void menuStartSelection(int newmenu, int selectionIndex) {
     menuActivateSelection(newmenu, selectionIndex);
-    displayClear(false);
+    displayClear();
     SELECTION *pSel = &menuActive->selection[menuActiveSelectionIndex];
     int action = pSel->menuSelectFn(pSel->menuSelectArg);
     buttonInputCaptured = (action == MENU_ACTION_CAPTURE);
@@ -89,6 +92,12 @@ void menuActivateSelection(int newmenu, int selectionIndex) {
     menuActive = &menu[newmenu];
     menuActiveSelectionIndex = selectionIndex;
     debugf("%s / %s\n", menuActive->label, menuActive->selection[menuActiveSelectionIndex].label);
+}
+
+// Go back
+int menuBack(int unused) {
+	menuActivateParent();
+	return MENU_ACTION_COMPLETED;
 }
 
 // Activate the specified menu and draw it
@@ -141,14 +150,9 @@ void menuButton(int buttonState) {
 
     // If any button is pressed, bring the menu up
     if (!menuEnabled) {
-        switch (buttonState) {
-        case BUTTON_PRESSED_L:
-        case BUTTON_PRESSED_S:
-        case BUTTON_PRESSED_R:
-            displayClear(false);
-            menuActivate(MAIN_MENU);
-            return;
-        }
+		if (pressFn != NULL)
+			pressFn(buttonState);
+		return;
     }
 
     // If button input is temporarily captured, reroute it to the current selection
@@ -162,7 +166,7 @@ void menuButton(int buttonState) {
             if (action == MENU_ACTION_DISMISS) {
                 menuDeactivate();
             } else {
-                displayClear(false);
+                displayClear();
                 menuRedraw();
             }
         }
@@ -191,12 +195,14 @@ void menuButton(int buttonState) {
         break;
     }
 
-    case BUTTON_PRESSED_L: {
-#if 1
-        displayClear(false);
+    case BUTTON_PRESSED_U: {
+        displayClear();
         menuActivateParent();
         menuActivityMs = millis();
-#else
+		break;
+	}
+
+    case BUTTON_PRESSED_L: {
         bool enabled;
         int previousIndex = menuActiveSelectionIndex;
         do {
@@ -212,19 +218,20 @@ void menuButton(int buttonState) {
         } while (!enabled);
         menuRedrawSelection(previousIndex, menuActiveSelectionIndex);
         menuActivityMs = millis();
-#endif
         break;
     }
 
     case BUTTON_PRESSED_S: {
-        displayClear(false);
+        displayClear();
         SELECTION *pSel = &menuActive->selection[menuActiveSelectionIndex];
         if (pSel->menuSelectFn != menuActivate)
             uiFlushInput();
         int action = pSel->menuSelectFn(pSel->menuSelectArg);
         buttonInputCaptured = (action == MENU_ACTION_CAPTURE);
-        if (action == MENU_ACTION_COMPLETED)
+        if (pSel->menuSelectFn != menuActivate && pSel->menuSelectFn != menuBack && action == MENU_ACTION_COMPLETED)
             menuActionCompleted();
+		else if (action == MENU_ACTION_DISMISS)
+            menuDeactivate();
         menuActivityMs = millis();
         break;
     }
@@ -255,10 +262,11 @@ void menuActivateParent() {
 // Refresh the home screen if the menu is NOT being actively displayed
 void menuHomeChanged() {
     if (!menuEnabled) {
-        if (homeFn != NULL)
-            homeFn(0);
-        else
-            displayClear(false);
+        if (homeFn != NULL) {
+            homeFn(BUTTON_REFRESH);
+        } else {
+            displayClear();
+		}
     } else {
         pollIfCaptured();
     }
@@ -268,6 +276,7 @@ void menuHomeChanged() {
 void menuDeactivate() {
     menuEnabled = false;
     buttonInputCaptured = false;
+    displayClear();
     menuHomeChanged();
 }
 
@@ -279,7 +288,7 @@ void menuActionCompleted() {
         return;
 
     // Return to the currently-selected menu
-    displayClear(false);
+    displayClear();
     menuRedraw();
 
 }
@@ -305,6 +314,12 @@ void menuLabelWithFlags(char *buf, char *label, menuFlagsFunc flagsFn) {
 
 // Redraw the menu on a background that we assume to be blank
 void menuRedraw() {
+
+	// Don't ever redraw the hidden menu
+	if (menuActive->label[0] == '-' && menuActive->label[1] == '\0') {
+		menuDeactivate();
+		return;
+	}
 
     // Display the menu header
     displaySetFont(FONT_HEADER);

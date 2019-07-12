@@ -62,27 +62,45 @@ static bool entryDequeue(int *buttonState) {
 }
 
 // Get the button that was pressed, and return the delay to wait for the next
+#define LONG_PRESS_MS 400
 static bool buttonPressPoll(int *button) {
 
-    // Figure out what was pressed, if anything
+    // Implement button press on long-press, and button press on short release
+	static bool ignoreReleaseA = false;
+	static bool ignoreReleaseB = false;
+	static bool ignoreReleaseC = false;
     int buttonPressed = BUTTON_NONE;
-	if (M5.BtnA.wasPressed()) {
-		buttonPressed = BUTTON_PRESSED_L;
-	} else if (M5.BtnB.wasPressed()) {
-		buttonPressed = BUTTON_PRESSED_S;
-	} else if (M5.BtnC.wasPressed()) {
-		buttonPressed = BUTTON_PRESSED_R;
+	if (!ignoreReleaseA && M5.BtnA.isPressed() && (millis() - M5.BtnA.lastChange()) >= LONG_PRESS_MS) {
+		buttonPressed = BUTTON_PRESSED_U;
+		ignoreReleaseA = true;
+	} else if (!ignoreReleaseB && M5.BtnB.isPressed() && (millis() - M5.BtnB.lastChange()) >= LONG_PRESS_MS) {
+		// ignore long-press of B
+		ignoreReleaseB = true;
+	} else if (!ignoreReleaseC && M5.BtnC.isPressed() && (millis() - M5.BtnC.lastChange()) >= LONG_PRESS_MS) {
+		buttonPressed = BUTTON_PRESSED_D;
+		ignoreReleaseC = true;
 	} else if (M5.BtnA.wasReleased()) {
-        buttonPressed = BUTTON_RELEASED;
+		if (ignoreReleaseA)
+			ignoreReleaseA = false;
+		else
+			buttonPressed = BUTTON_PRESSED_L;
 	} else if (M5.BtnB.wasReleased()) {
-        buttonPressed = BUTTON_RELEASED;
+		if (ignoreReleaseB)
+			ignoreReleaseB = false;
+		else
+			buttonPressed = BUTTON_PRESSED_S;
 	} else if (M5.BtnC.wasReleased()) {
-        buttonPressed = BUTTON_RELEASED;
+		if (ignoreReleaseC)
+			ignoreReleaseC = false;
+		else
+			buttonPressed = BUTTON_PRESSED_R;
 	}
 
 	// Update the button state after testing
 	M5.update();
-	
+	if (buttonPressed != BUTTON_NONE)
+		debugf("BUTTON %c\n", buttonPressed);
+
     // Exit with an indication of change
     *button = buttonPressed;
     return (buttonPressed != BUTTON_NONE);
@@ -95,8 +113,11 @@ static void uiPollDisplay() {
     // If we're showing the home screen and the data has changed, refresh
     if (clearDisplay) {
         clearDisplay = false;
-        displayClear(false);
+        displayClear();
     }
+
+	// Poll the home screen
+    menuHomeChanged();
 
     // Refresh home screen so long as there are changes, noting that because of concurrency
     // it may again be changed while we are in the middle of menuHomeChanged()
@@ -186,9 +207,6 @@ void uiInit() {
 
 	// Initialize the display subsystem
     displayInit();
-
-    // Initialize the menu subsystem, along with the procedure to display the "idle" screen
-    menuInit(showHome);
 
     // Done
     uiInitialized = true;

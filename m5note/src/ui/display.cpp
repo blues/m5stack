@@ -8,70 +8,68 @@
 #include "../../m5note.h"
 
 // These are the various fonts available to us
+// https://github.com/m5stack/M5Stack/blob/master/examples/Advanced/Display/Free_Font_Demo/Free_Fonts.h
 #include "free_fonts.h"
-#define FONT_TINY_FONT FSB9
-#define FONT_SMALL_FONT FSB12
-#define FONT_MEDIUM_FONT FSB18
-#define FONT_LARGE_FONT FSB24
+#define FONT_TINY_FONT FSS9
+#define FONT_SMALL_MONO_FONT FM12
+#define FONT_SMALL_MONO_BOLD_FONT FMB12
+#define FONT_SMALL_FONT FSS12
+#define FONT_MEDIUM_FONT FSS18
+#define FONT_LARGE_FONT FSS24
 
 // Text size parameters set by displaySetFont
 static int fontTextHeight = 1;
-static int fontTextAverageWidth = 1;
 
 // Fudge parameters
-#define DESCENDER (fontTextHeight/4)
-#define HSPACING  (fontTextAverageWidth/4)
+#define HSPACING  4
 
 // Set the font
 void displaySetFont(int fontid) {
+	M5.Lcd.setTextSize(1);
     M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
     switch (fontid) {
     case FONT_TINY:
-		fontTextHeight = 8;
-		fontTextAverageWidth = 6;
-		M5.Lcd.setTextSize(1);
         M5.Lcd.setFreeFont(FONT_TINY_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        break;
+    case FONT_SMALL_MONO:
+        M5.Lcd.setFreeFont(FONT_SMALL_MONO_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        break;
+    case FONT_SMALL_MONO_BOLD:
+	    M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
+        M5.Lcd.setFreeFont(FONT_SMALL_MONO_BOLD_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL:
-		fontTextHeight = 16;
-		fontTextAverageWidth = 8;
-		M5.Lcd.setTextSize(1);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_SELECTED:
-		fontTextHeight = 16;
-		fontTextAverageWidth = 8;
-		M5.Lcd.setTextSize(1);
-	    M5.Lcd.setTextColor(TFT_YELLOW, TFT_BLACK);
+	    M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_HIGHLIGHTED:
-		fontTextHeight = 16;
-		fontTextAverageWidth = 8;
-		M5.Lcd.setTextSize(1);
-	    M5.Lcd.setTextColor(TFT_RED, TFT_BLACK);
+	    M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
 		break;
     case FONT_SMALL_DISABLED:
-		fontTextHeight = 16;
-		fontTextAverageWidth = 8;
-		M5.Lcd.setTextSize(1);
 	    M5.Lcd.setTextColor(TFT_DARKGREY, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_MEDIUM:
-		fontTextHeight = 24;
-		fontTextAverageWidth = 16;
-		M5.Lcd.setTextSize(1);
         M5.Lcd.setFreeFont(FONT_MEDIUM_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_LARGE:
-		fontTextHeight = 32;
-		fontTextAverageWidth = 28;
-		M5.Lcd.setTextSize(1);
         M5.Lcd.setFreeFont(FONT_LARGE_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     }
+	M5.Lcd.setTextDatum(BL_DATUM);
 }
 
 // Mark that we're completed with display operations, so we
@@ -108,10 +106,9 @@ void displayGetTextBounds(const char *text, int x0, int y0, int16_t *x1, int16_t
 
 // Get the width and height of a given string
 void displayGetTextExtent(const char *text, int *optWidth, int *optHeight) {
-    int16_t x1, y1;
     uint16_t w, h;
-	w = strlen(text)*(fontTextAverageWidth+HSPACING);
-	h = fontTextHeight+DESCENDER;
+	w = M5.Lcd.textWidth(text);
+	h = fontTextHeight;
     if (optWidth != NULL)
         *optWidth = (int) w;
     if (optHeight != NULL)
@@ -140,12 +137,14 @@ void displaySetTextCursor(int col, int row, bool tightLineSpacing) {
     } else {
         displayGetFontBounds(&charWidth, &charHeight);
         int16_t x1, y1;
-        uint16_t w0, h0, w1, h1;
+        uint16_t w0, h0;
         displayGetTextBounds("M", 0, 0, &x1, &y1, &w0, &h0);
         charWidth = w0;
-        charHeight = h0 + 5;
+		charHeight = h0;
     }
-    M5.Lcd.setCursor(col * charWidth, (row+1) * charHeight);
+	int x = col * charWidth;
+	int y = (row+1) * charHeight;
+    M5.Lcd.setCursor(x, y);
 }
 
 // Print the text transparently on the background
@@ -158,12 +157,11 @@ void displayPrint(const char *text, int eraseMode) {
     displayGetTextBounds(text, x0, y0, &x1, &y1, &w, &h);
     x1 -= HSPACING+1;
     w += HSPACING+1;
-    h += DESCENDER+1;
     if ((eraseMode & PRINT_LINE) != 0)
         w = (M5.lcd.width() - x1) - 1;
     if ((eraseMode & (PRINT_OPAQUE|PRINT_LINE)) != 0)
         M5.lcd.fillRect(x1, y1, w, h, TFT_BLACK);
-    M5.Lcd.print(text);
+	M5.Lcd.drawString(text, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
 }
 
 // Optimally replace text at the current pos in a way that doesn't even require an update
@@ -183,9 +181,8 @@ void displayPrintReplace(int fromFont, const char *fromText, int toFont, const c
     bound.h = from.h;
     if (to.h > from.h)
         bound.h = to.h;
-    bound.h += DESCENDER*2;
     M5.lcd.fillRect(bound.x, bound.y, bound.w, bound.h, TFT_BLACK);
-    M5.Lcd.print(toText);
+	M5.Lcd.drawString(toText, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
     if (bounds != NULL)
         *bounds = bound;
 }
@@ -223,7 +220,7 @@ void displayInit() {
 }
 
 // Clear the display buffer, and set everything to default parameters
-void displayClear(bool force) {
+void displayClear() {
     M5.lcd.fillScreen(TFT_BLACK);
     M5.lcd.setTextColor(TFT_WHITE);
 }

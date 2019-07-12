@@ -10,6 +10,8 @@
 // Font definitions
 enum fontIDs {
     FONT_TINY,
+    FONT_SMALL_MONO,
+    FONT_SMALL_MONO_BOLD,
     FONT_SMALL,
     FONT_SMALL_HIGHLIGHTED,
     FONT_SMALL_DISABLED,
@@ -43,7 +45,7 @@ void displaySetFont(int fontid);
 void displaySetCursor(int x, int y);
 void displayGetCursor(int *x, int *y);
 void displaySetTextCursor(int col, int row, bool includeLineSpacing);
-void displayClear(bool force);
+void displayClear(void);
 void displayClearRect(rect *bound);
 void displayFillRect(rect *bound);
 void displayBitmap(rect *bound, uint8_t *bitmap);
