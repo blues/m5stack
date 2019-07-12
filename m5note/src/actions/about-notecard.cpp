@@ -21,7 +21,6 @@ int actionAboutNotecard(int buttonState) {
     // Display the notecard config and version
     displayClear();
     displayCenteredBegin(FONT_TINY);
-    char version[64];
 	char iccid[64] = {0};
     J *rsp = NoteRequestResponse(NoteNewRequest("card.version"));
     if (rsp != NULL) {
