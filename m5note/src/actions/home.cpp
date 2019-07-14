@@ -9,17 +9,22 @@
 
 // Show the home screen
 int actionHome(int buttonState) {
-
-    // Suppress the frequency of UI display
-    static bool fast = true;
+    static bool autoRefresh = true;
     static uint32_t refreshTimer = 0;
-    static uint32_t lastPoll = 0;
-	if (!timerExpiredMs(&lastPoll, 250)) {
-		lastPoll = millis();
-	    if (!timerExpiredSecs(&refreshTimer, fast ? 1 : 5))
+
+    // Display or just poll
+	switch (buttonState) {
+	case BUTTON_REFRESH:
+	    if (!autoRefresh || !timerExpiredSecs(&refreshTimer, 1))
 	        return MENU_ACTION_CAPTURE;
+	    refreshTimer = millis();
+		break;
+	case BUTTON_START:
+		break;
+	case DEFAULT:
+        return MENU_ACTION_CAPTURE;
 	}
-	
+
     // Exit if the UI is not yet active
     static bool firstActive = true;
     if (!uiIsActive()) {
@@ -33,9 +38,6 @@ int actionHome(int buttonState) {
         firstActive = false;
         displayClear();
     }
-
-    // Remember the last time we were refreshed, and schedule a refresh
-    refreshTimer = millis();
 
     // Display the status screen
     displayCenteredBegin(FONT_TINY);
@@ -59,6 +61,7 @@ int actionHome(int buttonState) {
 
     char status[128] = {0};
     if (NoteGetNetStatus(status, sizeof(status))) {
+        autoRefresh = strstr(status, "{idle}") == NULL;
         NoteErrorClean(status);
 		int maxLine1Len = 34;
 		int statusLen = strlen(status);
@@ -73,7 +76,6 @@ int actionHome(int buttonState) {
 			displayCentered(status);
 			displayCentered(&status[statusLen+1]);
 		}
-        fast = memcmp(status, "idle", 4) != 0;
     } else {
         displayCentered("");
     }
@@ -105,7 +107,13 @@ int actionHome(int buttonState) {
         displayCentered(timestr);
     }
 
+	displayCentered("");
+	displayCentered("");
     displayCenteredEnd();
+
+	// Display bottom line if not auto-refreshing
+	if (!autoRefresh)
+		displayBottomLine(FONT_TINY_HIGHLIGHTED, "REFRESH", "", "MENU");
 
     // Capture button input
     return MENU_ACTION_CAPTURE;

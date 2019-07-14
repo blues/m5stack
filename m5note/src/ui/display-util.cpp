@@ -81,13 +81,20 @@ void displayCenteredLine(int font, const char *text) {
 }
 
 // Display a single row, centered on the bottom of the display
-void displayBottomLine(int font, const char *text) {
+void displayBottomLine(int font, const char *textL, const char *textM, const char *textR) {
     displaySetFont(font);
-    int wText, wScreen, hScreen, hText;
+    int w, wScreen, hScreen, hText;
     displayGetFontBounds(NULL, &hText);
     displayGetScreenBounds(&wScreen, &hScreen);
-    displayGetTextExtent(text, &wText, NULL);
-    int cursorBaseY = hScreen - hText/4;
-    displaySetCursor(wScreen/2-wText/2, cursorBaseY);
-    displayPrint(text, PRINT_OPAQUE);
+	int y = hScreen - hText/4;
+	int lrOffset = wScreen/5;
+    displayGetTextExtent(textL, &w, NULL);
+    displaySetCursor(lrOffset-w/2, y);
+    displayPrint(textL, PRINT_OPAQUE);
+    displayGetTextExtent(textM, &w, NULL);
+    displaySetCursor(wScreen/2-w/2, y);
+    displayPrint(textM, PRINT_OPAQUE);
+    displayGetTextExtent(textR, &w, NULL);
+    displaySetCursor(wScreen-lrOffset-w/2, y);
+    displayPrint(textR, PRINT_OPAQUE);
 }

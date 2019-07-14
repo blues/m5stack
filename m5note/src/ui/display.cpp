@@ -32,6 +32,11 @@ void displaySetFont(int fontid) {
         M5.Lcd.setFreeFont(FONT_TINY_FONT);
 		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
+    case FONT_TINY_HIGHLIGHTED:
+	    M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
+        M5.Lcd.setFreeFont(FONT_TINY_FONT);
+		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        break;
     case FONT_SMALL_MONO:
         M5.Lcd.setFreeFont(FONT_SMALL_MONO_FONT);
 		fontTextHeight = M5.Lcd.fontHeight(GFXFF);

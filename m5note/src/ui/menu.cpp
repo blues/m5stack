@@ -277,7 +277,8 @@ void menuDeactivate() {
     menuEnabled = false;
     buttonInputCaptured = false;
     displayClear();
-    menuHomeChanged();
+    if (!menuEnabled && homeFn != NULL)
+        homeFn(BUTTON_START);
 }
 
 // Return to menu mode, clearing the screen

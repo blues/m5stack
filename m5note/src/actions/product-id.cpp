@@ -16,6 +16,7 @@ int actionSetProductID(int buttonState) {
         break;
     case BUTTON_RELEASED:
         return MENU_ACTION_CAPTURE;
+    case BUTTON_PRESSED_S:
     case BUTTON_PRESSED_R:
         menuStart(actionProductID);
         return MENU_ACTION_CAPTURE;

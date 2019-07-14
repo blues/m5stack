@@ -67,14 +67,17 @@ static MENU menu[] = {
 // Process a menu button when a menu is not set
 static int menuPress(int buttonState) {
         switch (buttonState) {
-        case BUTTON_PRESSED_U:
-        case BUTTON_PRESSED_D:
-        case BUTTON_PRESSED_L:
         case BUTTON_PRESSED_R:
-        case BUTTON_PRESSED_S:
             displayClear();
             menuActivate(MAIN_MENU);
             return 0;
+        case BUTTON_PRESSED_U:
+        case BUTTON_PRESSED_D:
+        case BUTTON_PRESSED_S:
+			break;
+        case BUTTON_PRESSED_L:
+            actionHome(BUTTON_START);
+			break;
         }
 	return 0;
 }

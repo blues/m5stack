@@ -10,6 +10,7 @@
 // Font definitions
 enum fontIDs {
     FONT_TINY,
+    FONT_TINY_HIGHLIGHTED,
     FONT_SMALL_MONO,
     FONT_SMALL_MONO_BOLD,
     FONT_SMALL,

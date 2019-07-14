@@ -39,7 +39,7 @@ void displayCentered(const char *text);
 void displayCenteredEnd(void);
 void displayCenteredBottomEnd(void);
 void displayCenteredLine(int font, const char *text);
-void displayBottomLine(int font, const char *text);
+void displayBottomLine(int font, const char *textL, const char *textM, const char *textR);
 
 //
 // edit-control.cpp
