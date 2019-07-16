@@ -12,15 +12,15 @@ int actionFactoryRestore(int buttonState) {
     switch (buttonState) {
     case BUTTON_START:
         break;
-    case BUTTON_PRESSED_R:
+    case BUTTON_PRESSED_U:
     case BUTTON_PRESSED_D:
     case BUTTON_PRESSED_S:
     case BUTTON_RELEASED:
         return MENU_ACTION_CAPTURE;
-    case BUTTON_PRESSED_U:
+    case BUTTON_PRESSED_R:
         if (!NoteFactoryReset(true))
             break;
-        return MENU_ACTION_COMPLETED;
+        return MENU_ACTION_DISMISS;
     default:
         return MENU_ACTION_COMPLETED;
     }
@@ -33,7 +33,7 @@ int actionFactoryRestore(int buttonState) {
 		displayCentered("(sensor is busy)");
 	else {
         displayCentered("Are you sure?");
-        displayCentered("(press UP to proceed)");
+        displayCentered("(press RIGHT to proceed)");
     }
 	displayCenteredEnd();
 

@@ -13,17 +13,17 @@ int actionHome(int buttonState) {
     static uint32_t refreshTimer = 0;
 
     // Display or just poll
-	switch (buttonState) {
-	case BUTTON_REFRESH:
-	    if (!autoRefresh || !timerExpiredSecs(&refreshTimer, 1))
-	        return MENU_ACTION_CAPTURE;
-	    refreshTimer = millis();
-		break;
-	case BUTTON_START:
-		break;
-	case DEFAULT:
+    switch (buttonState) {
+    case BUTTON_REFRESH:
+        if (!autoRefresh || !timerExpiredSecs(&refreshTimer, 1))
+            return MENU_ACTION_CAPTURE;
+        refreshTimer = millis();
+        break;
+    case BUTTON_START:
+        break;
+    case DEFAULT:
         return MENU_ACTION_CAPTURE;
-	}
+    }
 
     // Exit if the UI is not yet active
     static bool firstActive = true;
@@ -50,34 +50,57 @@ int actionHome(int buttonState) {
         if (changes == 0) {
             displayCentered("");
         } else if (changes == 1) {
-			displayCentered("1 change pending");
+            displayCentered("1 change pending");
         } else {
             char message[64];
             snprintf(message, sizeof(message), "%d changes pending", changes);
             displayCentered(message);
         }
-		NoteDeleteResponse(rsp);
+        NoteDeleteResponse(rsp);
     }
 
     char status[128] = {0};
-    if (NoteGetNetStatus(status, sizeof(status))) {
-        autoRefresh = strstr(status, "{idle}") == NULL;
-        NoteErrorClean(status);
-		int maxLine1Len = 34;
-		int statusLen = strlen(status);
-		if (statusLen <= maxLine1Len) {
-	        displayCentered(status);
-			displayCentered("");
-		} else {
-			statusLen = maxLine1Len;
-			while (statusLen > 0 && status[statusLen] != ' ')
-				statusLen--;
-			status[statusLen] = '\0';
-			displayCentered(status);
-			displayCentered(&status[statusLen+1]);
-		}
-    } else {
+    status[0] = '\0';
+    rsp = NoteRequestResponse(NoteNewRequest("service.status"));
+    if (rsp != NULL) {
+        strlcpy(status, JGetString(rsp, "status"), sizeof(status));
+        NoteDeleteResponse(rsp);
+    }
+    autoRefresh = strstr(status, "{idle}") == NULL;
+    NoteErrorClean(status);
+    int maxLine1Len = 34;
+    int statusLen = strlen(status);
+    if (statusLen <= maxLine1Len) {
+        displayCentered(status);
         displayCentered("");
+    } else {
+        statusLen = maxLine1Len;
+        while (statusLen > 0 && status[statusLen] != ' ')
+            statusLen--;
+        status[statusLen] = '\0';
+        displayCentered(status);
+        displayCentered(&status[statusLen+1]);
+    }
+
+    status[0] = '\0';
+    rsp = NoteRequestResponse(NoteNewRequest("service.sync.status"));
+    if (rsp != NULL) {
+        strlcpy(status, JGetString(rsp, "status"), sizeof(status));
+        NoteDeleteResponse(rsp);
+    }
+    NoteErrorClean(status);
+    maxLine1Len = 34;
+    statusLen = strlen(status);
+    if (statusLen <= maxLine1Len) {
+        displayCentered(status);
+        displayCentered("");
+    } else {
+        statusLen = maxLine1Len;
+        while (statusLen > 0 && status[statusLen] != ' ')
+            statusLen--;
+        status[statusLen] = '\0';
+        displayCentered(status);
+        displayCentered(&status[statusLen+1]);
     }
 
     if (NoteGetStatus(status, sizeof(status), NULL, NULL, NULL)) {
@@ -107,13 +130,11 @@ int actionHome(int buttonState) {
         displayCentered(timestr);
     }
 
-	displayCentered("");
-	displayCentered("");
     displayCenteredEnd();
 
-	// Display bottom line if not auto-refreshing
-	if (!autoRefresh)
-		displayBottomLine(FONT_TINY_HIGHLIGHTED, "REFRESH", "", "MENU");
+    // Display bottom line if not auto-refreshing
+    if (!autoRefresh)
+        displayBottomLine(FONT_TINY_HIGHLIGHTED, "REFRESH", "", "MENU");
 
     // Capture button input
     return MENU_ACTION_CAPTURE;
