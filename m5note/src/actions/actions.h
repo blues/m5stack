@@ -19,7 +19,6 @@
 // The various actions in their respective files
 //
 
-int actionHome(int arg);
 int actionSetSerialNumber(int buttonState);
 int actionSetProductID(int buttonState);
 int actionProductID(int buttonState);

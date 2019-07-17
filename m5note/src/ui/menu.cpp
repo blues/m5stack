@@ -277,7 +277,7 @@ void menuDeactivate() {
     menuEnabled = false;
     buttonInputCaptured = false;
     displayClear();
-    if (!menuEnabled && homeFn != NULL)
+    if (homeFn != NULL)
         homeFn(BUTTON_START);
 }
 

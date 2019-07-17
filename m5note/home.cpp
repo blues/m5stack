@@ -2,27 +2,23 @@
 // Use of this source code is governed by licenses granted by the
 // copyright holder including that found in the LICENSE file.
 
-// The product's home screen
+#include "m5note.h"
 
-#include "../../m5note.h"
-#include "../ui/ui.h"
-
-// Show the home screen
-int actionHome(int buttonState) {
+// Show the home screen.
+// This method is called initially with BUTTON_START, and then is polled quickly with BUTTON_REFRESH.
+int homeScreen(int buttonState) {
     static bool autoRefresh = true;
     static uint32_t refreshTimer = 0;
 
-    // Display or just poll
+    // Determine whether or not we should display the home screen, or refresh
     switch (buttonState) {
+    case BUTTON_START:
+        break;
     case BUTTON_REFRESH:
         if (!autoRefresh || !timerExpiredSecs(&refreshTimer, 1))
             return MENU_ACTION_CAPTURE;
         refreshTimer = millis();
         break;
-    case BUTTON_START:
-        break;
-    case DEFAULT:
-        return MENU_ACTION_CAPTURE;
     }
 
     // Exit if the UI is not yet active
@@ -39,9 +35,10 @@ int actionHome(int buttonState) {
         displayClear();
     }
 
-    // Display the status screen
+    // Display the status screen as a series of centered lines
     displayCenteredBegin(FONT_TINY);
 
+	// Status of pending outbound changes
     J *rsp = NoteRequestResponse(NoteNewRequest("files.stats"));
     if (rsp == NULL) {
         displayCentered("");
@@ -59,6 +56,7 @@ int actionHome(int buttonState) {
         NoteDeleteResponse(rsp);
     }
 
+	// Status of our connection to the service, displayed on two lines
     char status[128] = {0};
     status[0] = '\0';
     rsp = NoteRequestResponse(NoteNewRequest("service.status"));
@@ -82,6 +80,7 @@ int actionHome(int buttonState) {
         displayCentered(&status[statusLen+1]);
     }
 
+	// Status of service synchronization, displayed on two lines
     status[0] = '\0';
     rsp = NoteRequestResponse(NoteNewRequest("service.sync.status"));
     if (rsp != NULL) {
@@ -103,6 +102,7 @@ int actionHome(int buttonState) {
         displayCentered(&status[statusLen+1]);
     }
 
+	// Status of the Notecard
     if (NoteGetStatus(status, sizeof(status), NULL, NULL, NULL)) {
         NoteErrorClean(status);
         displayCentered(status);
@@ -110,6 +110,7 @@ int actionHome(int buttonState) {
         displayCentered("");
     }
 
+	// Status of the GPS
     double lat, lon;
     char locStatus[MAXTEXT];
     epoch time;
@@ -122,20 +123,26 @@ int actionHome(int buttonState) {
         displayCentered(locstr);
     }
 
+	// The current time, displayed in the local timezone as determined by the service
     if (!NoteTimeValid())
         displayCentered("(time not yet known)");
     else {
         char timestr[64];
-        timeString(NoteTimeST(), timestr, sizeof(timestr));
+		char *Country, *Area, *Zone;
+		int ZoneOffset;
+		NoteRegion(&Country, &Area, &Zone, &ZoneOffset);
+        timeStringLocal(NoteTimeST(), ZoneOffset, Zone, timestr, sizeof(timestr));
         displayCentered(timestr);
     }
 
+	// Display it
     displayCenteredEnd();
 
-    // Display bottom line if not auto-refreshing
+    // Display the COMMANDS on the bottom line if we're not in auto-refresh mode
     if (!autoRefresh)
         displayBottomLine(FONT_TINY_HIGHLIGHTED, "REFRESH", "", "MENU");
 
-    // Capture button input
+    // Continue to capture button input and call us back to display again
     return MENU_ACTION_CAPTURE;
+
 }

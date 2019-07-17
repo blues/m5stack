@@ -76,13 +76,13 @@ static int menuPress(int buttonState) {
         case BUTTON_PRESSED_S:
 			break;
         case BUTTON_PRESSED_L:
-            actionHome(BUTTON_START);
+            menuDeactivate();
 			break;
         }
 	return 0;
 }
 
 // Initialize the menu subsystem
-void menuInit() {
-    menuSet(menu, actionHome, menuPress);
+void menuInit(menuSelectFunc home) {
+    menuSet(menu, home, menuPress);
 }

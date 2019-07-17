@@ -15,10 +15,15 @@
 
 // config-menu.cpp
 
-void menuInit(void);
+void menuInit(menuSelectFunc home);
+
+// home.cpp
+
+int homeScreen(int arg);
 
 // timer.cpp
 
 bool timerExpiredMs(uint32_t *timer, uint32_t periodMs);
 bool timerExpiredSecs(uint32_t *timer, uint32_t periodSecs);
 bool timeString(uint32_t secs, char *buf, int bufLen);
+bool timeStringLocal(epoch secs, int offsetMins, char *zone, char *buf, int bufLen);
