@@ -44,15 +44,18 @@ void displayCenteredEnd() {
     displayGetScreenBounds(&wScreen, &hScreen);
     int cursorBaseY = ((hScreen - hText*dispRows)/2) + (hText*2)/3;
     M5.lcd.fillRect(0, cursorBaseY-hText, wScreen, hText*dispRows, TFT_BLACK);
+	debugf("*** %d rows ***\n", dispRows);
     for (int i=0; i<dispRows; i++) {
         if (i >= dispMaxRows)
             break;
         int wText;
         char *text = dispRow[i];
+		debugf("%s\n", text);
         displayGetTextExtent(text, &wText, NULL);
         displaySetCursor(wScreen/2-wText/2, cursorBaseY + i*hText);
         displayPrint(text, PRINT_TRANSPARENT);
     }
+	debugf("***\n");
 }
 
 // Display the rows and update the screen

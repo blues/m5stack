@@ -57,7 +57,7 @@ int homeScreen(int buttonState) {
     }
 
 	// Status of our connection to the service, displayed on two lines
-    char status[128] = {0};
+    char status[128];
     status[0] = '\0';
     rsp = NoteRequestResponse(NoteNewRequest("service.status"));
     if (rsp != NULL) {
