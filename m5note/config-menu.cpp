@@ -20,6 +20,7 @@ static MENU menu[] = {
           {"Sync With Service Now", NULL, actionTestSync, BUTTON_START},
           {"Stay Connected", flagTestIsContinuous, actionTestToggleContinuous, BUTTON_START},
           {"Setup >", NULL, menuActivate, SETUP_MENU},
+          {"Demo", NULL, actionDemo, BUTTON_START},
           {"< Back", NULL, menuBack, 0},
           ENDMENU,
       }

@@ -41,3 +41,5 @@ int flagTestIsContinuous(char *buf, int buflen);
 int actionTestToggleContinuous(int buttonState);
 int actionTestAdd(int buttonState);
 int actionTestSync(int buttonState);
+int actionDemo(int buttonState);
+

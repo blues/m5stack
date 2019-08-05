@@ -3,6 +3,11 @@
 // copyright holder including that found in the LICENSE file.
 
 #include "m5note.h"
+
+// By using a notehub.io account "your-email@address.com", data will flow to your notehub.io Personal Project.
+// Otherwise, you may specify the Product ID that you selected in your notehub.io's Project Settings.
+// If you'd like to enter the Product ID on the device itself, leave this "".
+#define	NOTEHUB_PRODUCT_ID "ray@ozzie.net"
   
 // Tell the Notehub which of its accounts manages this device, and configure how often to upload.
 void setup() {
@@ -26,6 +31,10 @@ void setup() {
 	    displayClear();
 		displayCenteredLine(FONT_SMALL, "waiting for notecard...");
 	}
+
+	// If we'd prefer to set the product ID here, do it.
+	if (NOTEHUB_PRODUCT_ID[0] != '\0')
+		NoteSetProductID(NOTEHUB_PRODUCT_ID);
 
 }
   
