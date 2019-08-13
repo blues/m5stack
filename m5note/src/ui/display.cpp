@@ -9,7 +9,7 @@
 
 // These are the various fonts available to us
 // https://github.com/m5stack/M5Stack/blob/master/examples/Advanced/Display/Free_Font_Demo/Free_Fonts.h
-#include "free_fonts.h"
+#include "Free_Fonts.h"
 #define FONT_TINY_FONT FSS9
 #define FONT_SMALL_MONO_FONT FM12
 #define FONT_SMALL_MONO_BOLD_FONT FMB12
