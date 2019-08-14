@@ -7,7 +7,7 @@
 // By using a notehub.io account "your-email@address.com", data will flow to your notehub.io Personal Project.
 // Otherwise, you may specify the Product ID that you selected in your notehub.io's Project Settings.
 // If you'd like to enter the Product ID on the device itself, leave this "".
-#define	NOTEHUB_PRODUCT_ID "ray@ozzie.net"
+#define	NOTEHUB_PRODUCT_ID "EMAIL_REGISTERED_WITH_NOTEHUB.IO"
   
 // Tell the Notehub which of its accounts manages this device, and configure how often to upload.
 void setup() {
