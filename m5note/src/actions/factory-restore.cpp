@@ -27,15 +27,15 @@ int actionFactoryRestore(int buttonState) {
 
     // Prompt for validation
     displayClear();
-	displayCenteredBegin(FONT_SMALL);
-	char version[64];
+    displayCenteredBegin(FONT_SMALL);
+    char version[64];
     if (!NoteGetVersion(version, sizeof(version)))
-		displayCentered("(sensor is busy)");
-	else {
+        displayCentered("(sensor is busy)");
+    else {
         displayCentered("Are you sure?");
         displayCentered("(press RIGHT to proceed)");
     }
-	displayCenteredEnd();
+    displayCenteredEnd();
 
     // Capture button input
     return MENU_ACTION_CAPTURE;

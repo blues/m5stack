@@ -20,7 +20,7 @@ static int dispFont;
 void displayCenteredBegin(int font) {
     dispRows = 0;
     displaySetFont(font);
-	dispFont = font;
+    dispFont = font;
     int wScreen, hScreen, wText, hText;
     displayGetScreenBounds(&wScreen, &hScreen);
     displayGetFontBounds(&wText, &hText);
@@ -67,8 +67,8 @@ void displayCenteredBottomEnd() {
         char *text = dispRow[i];
         displayGetScreenBounds(&wScreen, &hScreen);
         displayGetTextExtent(text, &wText, NULL);
-		int cursorBaseY = hScreen - hText/4 - (dispRows-i-1)*hText;
-	    displaySetCursor(wScreen/2-wText/2, cursorBaseY - (hText/2));
+        int cursorBaseY = hScreen - hText/4 - (dispRows-i-1)*hText;
+        displaySetCursor(wScreen/2-wText/2, cursorBaseY - (hText/2));
         displayPrint(text, PRINT_OPAQUE);
     }
 }
@@ -86,8 +86,8 @@ void displayBottomLine(int font, const char *textL, const char *textM, const cha
     int w, wScreen, hScreen, hText;
     displayGetFontBounds(NULL, &hText);
     displayGetScreenBounds(&wScreen, &hScreen);
-	int y = hScreen - hText/4;
-	int lrOffset = wScreen/5;
+    int y = hScreen - hText/4;
+    int lrOffset = wScreen/5;
     displayGetTextExtent(textL, &w, NULL);
     displaySetCursor(lrOffset-w/2, y);
     displayPrint(textL, PRINT_OPAQUE);

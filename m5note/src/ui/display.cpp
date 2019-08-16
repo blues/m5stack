@@ -25,56 +25,56 @@ static int fontTextHeight = 1;
 
 // Set the font
 void displaySetFont(int fontid) {
-	M5.Lcd.setTextSize(1);
+    M5.Lcd.setTextSize(1);
     M5.Lcd.setTextColor(TFT_WHITE, TFT_BLACK);
     switch (fontid) {
     case FONT_TINY:
         M5.Lcd.setFreeFont(FONT_TINY_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_TINY_HIGHLIGHTED:
-	    M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_TINY_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_MONO:
         M5.Lcd.setFreeFont(FONT_SMALL_MONO_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_MONO_BOLD:
-	    M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_MONO_BOLD_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL:
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_SELECTED:
-	    M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_SMALL_HIGHLIGHTED:
-	    M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_ORANGE, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
-		break;
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        break;
     case FONT_SMALL_DISABLED:
-	    M5.Lcd.setTextColor(TFT_DARKGREY, TFT_BLACK);
+        M5.Lcd.setTextColor(TFT_DARKGREY, TFT_BLACK);
         M5.Lcd.setFreeFont(FONT_SMALL_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_MEDIUM:
         M5.Lcd.setFreeFont(FONT_MEDIUM_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     case FONT_LARGE:
         M5.Lcd.setFreeFont(FONT_LARGE_FONT);
-		fontTextHeight = M5.Lcd.fontHeight(GFXFF);
+        fontTextHeight = M5.Lcd.fontHeight(GFXFF);
         break;
     }
-	M5.Lcd.setTextDatum(BL_DATUM);
+    M5.Lcd.setTextDatum(BL_DATUM);
 }
 
 // Mark that we're completed with display operations, so we
@@ -112,8 +112,8 @@ void displayGetTextBounds(const char *text, int x0, int y0, int16_t *x1, int16_t
 // Get the width and height of a given string
 void displayGetTextExtent(const char *text, int *optWidth, int *optHeight) {
     uint16_t w, h;
-	w = M5.Lcd.textWidth(text);
-	h = fontTextHeight;
+    w = M5.Lcd.textWidth(text);
+    h = fontTextHeight;
     if (optWidth != NULL)
         *optWidth = (int) w;
     if (optHeight != NULL)
@@ -145,10 +145,10 @@ void displaySetTextCursor(int col, int row, bool tightLineSpacing) {
         uint16_t w0, h0;
         displayGetTextBounds("M", 0, 0, &x1, &y1, &w0, &h0);
         charWidth = w0;
-		charHeight = h0;
+        charHeight = h0;
     }
-	int x = col * charWidth;
-	int y = (row+1) * charHeight;
+    int x = col * charWidth;
+    int y = (row+1) * charHeight;
     M5.Lcd.setCursor(x, y);
 }
 
@@ -166,7 +166,7 @@ void displayPrint(const char *text, int eraseMode) {
         w = (M5.lcd.width() - x1) - 1;
     if ((eraseMode & (PRINT_OPAQUE|PRINT_LINE)) != 0)
         M5.lcd.fillRect(x1, y1, w, h, TFT_BLACK);
-	M5.Lcd.drawString(text, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
+    M5.Lcd.drawString(text, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
 }
 
 // Optimally replace text at the current pos in a way that doesn't even require an update
@@ -187,7 +187,7 @@ void displayPrintReplace(int fromFont, const char *fromText, int toFont, const c
     if (to.h > from.h)
         bound.h = to.h;
     M5.lcd.fillRect(bound.x, bound.y, bound.w, bound.h, TFT_BLACK);
-	M5.Lcd.drawString(toText, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
+    M5.Lcd.drawString(toText, M5.Lcd.getCursorX(), M5.Lcd.getCursorY(), GFXFF);
     if (bounds != NULL)
         *bounds = bound;
 }
@@ -220,7 +220,7 @@ void displayBitmap(rect *bound, uint8_t *bitmap) {
 
 // Initialize the M5 libraries and also the display
 void displayInit() {
-	M5.begin();
+    M5.begin();
     M5.lcd.init();
 }
 

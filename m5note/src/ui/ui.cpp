@@ -66,40 +66,40 @@ static bool entryDequeue(int *buttonState) {
 static bool buttonPressPoll(int *button) {
 
     // Implement button press on long-press, and button press on short release
-	static bool ignoreReleaseA = false;
-	static bool ignoreReleaseB = false;
-	static bool ignoreReleaseC = false;
+    static bool ignoreReleaseA = false;
+    static bool ignoreReleaseB = false;
+    static bool ignoreReleaseC = false;
     int buttonPressed = BUTTON_NONE;
-	if (!ignoreReleaseA && M5.BtnA.isPressed() && (millis() - M5.BtnA.lastChange()) >= LONG_PRESS_MS) {
-		buttonPressed = BUTTON_PRESSED_U;
-		ignoreReleaseA = true;
-	} else if (!ignoreReleaseB && M5.BtnB.isPressed() && (millis() - M5.BtnB.lastChange()) >= LONG_PRESS_MS) {
-		// ignore long-press of B
-		ignoreReleaseB = true;
-	} else if (!ignoreReleaseC && M5.BtnC.isPressed() && (millis() - M5.BtnC.lastChange()) >= LONG_PRESS_MS) {
-		buttonPressed = BUTTON_PRESSED_D;
-		ignoreReleaseC = true;
-	} else if (M5.BtnA.wasReleased()) {
-		if (ignoreReleaseA)
-			ignoreReleaseA = false;
-		else
-			buttonPressed = BUTTON_PRESSED_L;
-	} else if (M5.BtnB.wasReleased()) {
-		if (ignoreReleaseB)
-			ignoreReleaseB = false;
-		else
-			buttonPressed = BUTTON_PRESSED_S;
-	} else if (M5.BtnC.wasReleased()) {
-		if (ignoreReleaseC)
-			ignoreReleaseC = false;
-		else
-			buttonPressed = BUTTON_PRESSED_R;
-	}
+    if (!ignoreReleaseA && M5.BtnA.isPressed() && (millis() - M5.BtnA.lastChange()) >= LONG_PRESS_MS) {
+        buttonPressed = BUTTON_PRESSED_U;
+        ignoreReleaseA = true;
+    } else if (!ignoreReleaseB && M5.BtnB.isPressed() && (millis() - M5.BtnB.lastChange()) >= LONG_PRESS_MS) {
+        // ignore long-press of B
+        ignoreReleaseB = true;
+    } else if (!ignoreReleaseC && M5.BtnC.isPressed() && (millis() - M5.BtnC.lastChange()) >= LONG_PRESS_MS) {
+        buttonPressed = BUTTON_PRESSED_D;
+        ignoreReleaseC = true;
+    } else if (M5.BtnA.wasReleased()) {
+        if (ignoreReleaseA)
+            ignoreReleaseA = false;
+        else
+            buttonPressed = BUTTON_PRESSED_L;
+    } else if (M5.BtnB.wasReleased()) {
+        if (ignoreReleaseB)
+            ignoreReleaseB = false;
+        else
+            buttonPressed = BUTTON_PRESSED_S;
+    } else if (M5.BtnC.wasReleased()) {
+        if (ignoreReleaseC)
+            ignoreReleaseC = false;
+        else
+            buttonPressed = BUTTON_PRESSED_R;
+    }
 
-	// Update the button state after testing
-	M5.update();
-	if (buttonPressed != BUTTON_NONE)
-		debugf("BUTTON %c\n", buttonPressed);
+    // Update the button state after testing
+    M5.update();
+    if (buttonPressed != BUTTON_NONE)
+        debugf("BUTTON %c\n", buttonPressed);
 
     // Exit with an indication of change
     *button = buttonPressed;
@@ -116,7 +116,7 @@ static void uiPollDisplay() {
         displayClear();
     }
 
-	// Poll the home screen
+    // Poll the home screen
     menuHomeChanged();
 
     // Refresh home screen so long as there are changes, noting that because of concurrency
@@ -172,22 +172,22 @@ void uiFlushInput() {
 
 // Return true if all initializations have been completed and we're now active
 bool uiIsActive() {
-	return uiActive;
+    return uiActive;
 }
 
 // Poll UI subsystems
 void uiPoll() {
 
-	// Exit if not initialized
+    // Exit if not initialized
     if (!uiInitialized)
         return;
 
-	// Enable others to know that we are now running
-	if (!uiActive) {
-		uiActive = true;
-		uiRefreshStatus(false);
-	}
-	
+    // Enable others to know that we are now running
+    if (!uiActive) {
+        uiActive = true;
+        uiRefreshStatus(false);
+    }
+    
     // If we're not running the button task, poll it
     buttonPoll();
 
@@ -205,7 +205,7 @@ void uiInit() {
     if (!first) return;
     first = false;
 
-	// Initialize the display subsystem
+    // Initialize the display subsystem
     displayInit();
 
     // Done

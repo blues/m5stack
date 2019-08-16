@@ -11,15 +11,15 @@
 // ui.cpp
 //
 
-#define	BUTTON_NONE			'o'
-#define	BUTTON_START		's'
-#define BUTTON_REFRESH		'r'
-#define BUTTON_RELEASED		'x'
-#define BUTTON_PRESSED_R	'R'
-#define BUTTON_PRESSED_L	'L'
-#define BUTTON_PRESSED_U	'U'
-#define BUTTON_PRESSED_D	'D'
-#define BUTTON_PRESSED_S	'S'
+#define BUTTON_NONE             'o'
+#define BUTTON_START            's'
+#define BUTTON_REFRESH          'r'
+#define BUTTON_RELEASED         'x'
+#define BUTTON_PRESSED_R        'R'
+#define BUTTON_PRESSED_L        'L'
+#define BUTTON_PRESSED_U        'U'
+#define BUTTON_PRESSED_D        'D'
+#define BUTTON_PRESSED_S        'S'
 
 void uiInit(void);
 bool uiIsActive(void);

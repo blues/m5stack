@@ -12,7 +12,7 @@ const char *settingsLocation() {
     const char *loc = LOCATION_UNKNOWN;
     J *rsp = NoteRequestResponse(NoteNewRequest("card.location.mode"));
     if (rsp != NULL) {
-		loc = JGetString(rsp, "mode");
+        loc = JGetString(rsp, "mode");
         if (strcmp(loc, "periodic") == 0) {
             if (JGetBool(rsp, "start"))
                 loc = LOCATION_TRACK;
@@ -28,13 +28,13 @@ const char *settingsLocation() {
 bool setLocationSettings(const char *settings) {
     J *req = NoteNewRequest("card.location.mode");
     if (req == NULL)
-		return false;
-	if (strcmp(settings, LOCATION_TRACK) == 0) {
-		JAddBoolToObject(req, "start", true);
-		settings = LOCATION_PERIODIC;
-	} else {
-		JAddBoolToObject(req, "stop", true);
-	}
+        return false;
+    if (strcmp(settings, LOCATION_TRACK) == 0) {
+        JAddBoolToObject(req, "start", true);
+        settings = LOCATION_PERIODIC;
+    } else {
+        JAddBoolToObject(req, "stop", true);
+    }
     JAddStringToObject(req, "mode", settings);
     return NoteRequest(req);
 }
