@@ -13,15 +13,15 @@ int actionDemo(int buttonState) {
     case BUTTON_START:
         break;
     case BUTTON_REFRESH:
-		return MENU_ACTION_CAPTURE;
+        return MENU_ACTION_CAPTURE;
     default:
         return MENU_ACTION_COMPLETED;
     }
 
     // Bring up the edit control
-	J *rsp = NoteRequestResponse(NoteNewRequest("card.version"));
-	displayCenteredLine(FONT_TINY, JGetString(rsp, "name"));
-	NoteDeleteResponse(rsp);
+    J *rsp = NoteRequestResponse(NoteNewRequest("card.version"));
+    displayCenteredLine(FONT_TINY, JGetString(rsp, "name"));
+    NoteDeleteResponse(rsp);
 
     // Capture button input
     return MENU_ACTION_CAPTURE;

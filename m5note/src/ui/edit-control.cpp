@@ -20,9 +20,9 @@
 static const char *ecSelectorASCII[] {
         " @.()[]{}<>|'\"`/\\^~?:! ",
         " 0123456789#$%&*_=+-,; ",
-		" aAbBcCdDeEfFgGhHiIjJ ",
-		" KklLmMnNoOpPqQrRsStT ",
-		" uUvVwWxXyYzZ         ",
+        " aAbBcCdDeEfFgGhHiIjJ ",
+        " KklLmMnNoOpPqQrRsStT ",
+        " uUvVwWxXyYzZ         ",
         };
 static int ecSelectorASCIIStartRow = 0;
 static int ecSelectorASCIIStartCol = 1;
@@ -85,9 +85,9 @@ static char editedText[64] = {0};
 
 // Map space character
 char mapSpace(char ch) {
-	if (ch == ' ')
-		ch = '_';
-	return ch;
+    if (ch == ' ')
+        ch = '_';
+    return ch;
 }
 
 // Deselect the currently-selected cell
@@ -96,12 +96,12 @@ void ecRedrawSel(int fontidFrom, int fontidTo, rect *update) {
         char charbufFrom[2], charbufTo[2];
         charbufFrom[0] = ecSelector[ecSelectedRow][ecSelectedCol];
         charbufFrom[1] = '\0';
-		charbufTo[0] = charbufFrom[0];
+        charbufTo[0] = charbufFrom[0];
         charbufTo[1] = charbufFrom[1];;
-		if (fontidTo == FONT_EC_BOLD)
-			charbufTo[0] = mapSpace(charbufTo[0]);
-		else
-			charbufFrom[0] = mapSpace(charbufFrom[0]);
+        if (fontidTo == FONT_EC_BOLD)
+            charbufTo[0] = mapSpace(charbufTo[0]);
+        else
+            charbufFrom[0] = mapSpace(charbufFrom[0]);
         displaySetCursor(ecSelectedCol * ecCharWidth, (ecSelectedRow+1) * ecCharHeight);
         displayPrintReplace(fontidFrom, charbufFrom, fontidTo, charbufTo, update);
     } else {
@@ -131,12 +131,12 @@ void editControlBegin(char *password, int charset) {
         ecSelectorStartCol = ecSelectorASCIIStartCol;
         ecDisallowSpace = ecSelectorASCIIDisallowSpace;
         break;
-	case EDIT_CHARSET_NUMERIC:
+    case EDIT_CHARSET_NUMERIC:
         ecSelectorCharset = ecSelectorNUMERIC;
         ecSelectorStartRow = ecSelectorNUMERICStartRow;
         ecSelectorStartCol = ecSelectorNUMERICStartCol;
         ecDisallowSpace = ecSelectorNUMERICDisallowSpace;
-		break;
+        break;
     }
 
     // Initialize the new password buffer
@@ -187,11 +187,11 @@ void editControlBegin(char *password, int charset) {
 
     // Display help text
     int wText, hText;
-	const char *text = "Press-and-Hold for UP/DOWN";
+    const char *text = "Press-and-Hold for UP/DOWN";
     displayGetTextExtent(text, &wText, &hText);
     displaySetCursor(ecXCenter-wText/2, ecY-(hText*2));
-	displaySetFont(FONT_SMALL_HIGHLIGHTED);
-	displayPrint(text, PRINT_OPAQUE);
+    displaySetFont(FONT_SMALL_HIGHLIGHTED);
+    displayPrint(text, PRINT_OPAQUE);
 
 }
 

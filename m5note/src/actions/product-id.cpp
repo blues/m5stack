@@ -24,9 +24,9 @@ int actionSetProductID(int buttonState) {
         return MENU_ACTION_COMPLETED;
     }
 
-	// Display static text
+    // Display static text
     displayClear();
-	displayCenteredBegin(FONT_TINY);
+    displayCenteredBegin(FONT_TINY);
     if (NOTEHUB_WEBSITE[0] != '\0') {
         displayCentered("By using a " NOTEHUB_WEBSITE " account");
         displayCentered("email@address.com, data will flow to");
@@ -41,7 +41,7 @@ int actionSetProductID(int buttonState) {
         displayCentered("");
         displayCentered("continue >");
     }
-	displayCenteredEnd();
+    displayCenteredEnd();
 
     // Capture button input
     return MENU_ACTION_CAPTURE;
@@ -67,16 +67,16 @@ int actionProductID(int buttonState) {
             }
 
         } else if (action == MENU_ACTION_CANCEL) {
-			action = MENU_ACTION_DISMISS;
-		}
+            action = MENU_ACTION_DISMISS;
+        }
         return (action);
     }
 
     // Bring up the password view control
-	pidbuf[0] = '\0';
+    pidbuf[0] = '\0';
     if (J *rsp = NoteRequestResponse(NoteNewRequest("service.get"))) {
-	    strlcpy(pidbuf, JGetString(rsp, "product"), sizeof(pidbuf));
-	    NoteDeleteResponse(rsp);
+        strlcpy(pidbuf, JGetString(rsp, "product"), sizeof(pidbuf));
+        NoteDeleteResponse(rsp);
     }
     editControlBegin(pidbuf, EDIT_CHARSET_PRODUCTID);
 

@@ -38,7 +38,7 @@ int homeScreen(int buttonState) {
     // Display the status screen as a series of centered lines
     displayCenteredBegin(FONT_TINY);
 
-	// Status of pending outbound changes
+    // Status of pending outbound changes
     J *rsp = NoteRequestResponse(NoteNewRequest("files.stats"));
     if (rsp == NULL) {
         displayCentered("");
@@ -56,7 +56,7 @@ int homeScreen(int buttonState) {
         NoteDeleteResponse(rsp);
     }
 
-	// Status of our connection to the service, displayed on two lines
+    // Status of our connection to the service, displayed on two lines
     char status[128];
     status[0] = '\0';
     rsp = NoteRequestResponse(NoteNewRequest("service.status"));
@@ -80,7 +80,7 @@ int homeScreen(int buttonState) {
         displayCentered(&status[statusLen+1]);
     }
 
-	// Status of service synchronization, displayed on two lines
+    // Status of service synchronization, displayed on two lines
     status[0] = '\0';
     rsp = NoteRequestResponse(NoteNewRequest("service.sync.status"));
     if (rsp != NULL) {
@@ -102,7 +102,7 @@ int homeScreen(int buttonState) {
         displayCentered(&status[statusLen+1]);
     }
 
-	// Status of the Notecard
+    // Status of the Notecard
     if (NoteGetStatus(status, sizeof(status), NULL, NULL, NULL)) {
         NoteErrorClean(status);
         displayCentered(status);
@@ -110,7 +110,7 @@ int homeScreen(int buttonState) {
         displayCentered("");
     }
 
-	// Status of the GPS
+    // Status of the GPS
     double lat, lon;
     char locStatus[MAXTEXT];
     epoch time;
@@ -123,19 +123,19 @@ int homeScreen(int buttonState) {
         displayCentered(locstr);
     }
 
-	// The current time, displayed in the local timezone as determined by the service
+    // The current time, displayed in the local timezone as determined by the service
     if (!NoteTimeValid())
         displayCentered("(time not yet known)");
     else {
         char timestr[64];
-		char *Country, *Area, *Zone;
-		int ZoneOffset;
-		NoteRegion(&Country, &Area, &Zone, &ZoneOffset);
+        char *Country, *Area, *Zone;
+        int ZoneOffset;
+        NoteRegion(&Country, &Area, &Zone, &ZoneOffset);
         timeStringLocal(NoteTimeST(), ZoneOffset, Zone, timestr, sizeof(timestr));
         displayCentered(timestr);
     }
 
-	// Display it
+    // Display it
     displayCenteredEnd();
 
     // Display the COMMANDS on the bottom line if we're not in auto-refresh mode

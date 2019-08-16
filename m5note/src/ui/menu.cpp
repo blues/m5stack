@@ -45,9 +45,9 @@ void menuActivateSelection(int newmenu, int selectionIndex);
 
 // Initialize the menu subsystem 
 void menuSet(MENU *pMenu, menuSelectFunc fnHome, menuSelectFunc fnPress) {
-	menu = pMenu;
+    menu = pMenu;
     homeFn = fnHome;
-	pressFn = fnPress;
+    pressFn = fnPress;
     menuHomeChanged();
 }
 
@@ -96,8 +96,8 @@ void menuActivateSelection(int newmenu, int selectionIndex) {
 
 // Go back
 int menuBack(int unused) {
-	menuActivateParent();
-	return MENU_ACTION_COMPLETED;
+    menuActivateParent();
+    return MENU_ACTION_COMPLETED;
 }
 
 // Activate the specified menu and draw it
@@ -150,9 +150,9 @@ void menuButton(int buttonState) {
 
     // If any button is pressed, bring the menu up
     if (!menuEnabled) {
-		if (pressFn != NULL)
-			pressFn(buttonState);
-		return;
+        if (pressFn != NULL)
+            pressFn(buttonState);
+        return;
     }
 
     // If button input is temporarily captured, reroute it to the current selection
@@ -199,8 +199,8 @@ void menuButton(int buttonState) {
         displayClear();
         menuActivateParent();
         menuActivityMs = millis();
-		break;
-	}
+        break;
+    }
 
     case BUTTON_PRESSED_L: {
         bool enabled;
@@ -230,7 +230,7 @@ void menuButton(int buttonState) {
         buttonInputCaptured = (action == MENU_ACTION_CAPTURE);
         if (pSel->menuSelectFn != menuActivate && pSel->menuSelectFn != menuBack && action == MENU_ACTION_COMPLETED)
             menuActionCompleted();
-		else if (action == MENU_ACTION_DISMISS)
+        else if (action == MENU_ACTION_DISMISS)
             menuDeactivate();
         menuActivityMs = millis();
         break;
@@ -266,7 +266,7 @@ void menuHomeChanged() {
             homeFn(BUTTON_REFRESH);
         } else {
             displayClear();
-		}
+        }
     } else {
         pollIfCaptured();
     }
@@ -279,7 +279,7 @@ void menuDeactivate() {
     displayClear();
     if (homeFn != NULL) {
         homeFn(BUTTON_START);
-	}
+    }
 }
 
 // Return to menu mode, clearing the screen
@@ -317,11 +317,11 @@ void menuLabelWithFlags(char *buf, char *label, menuFlagsFunc flagsFn) {
 // Redraw the menu on a background that we assume to be blank
 void menuRedraw() {
 
-	// Don't ever redraw the hidden menu
-	if (menuActive->label[0] == '-' && menuActive->label[1] == '\0') {
-		menuDeactivate();
-		return;
-	}
+    // Don't ever redraw the hidden menu
+    if (menuActive->label[0] == '-' && menuActive->label[1] == '\0') {
+        menuDeactivate();
+        return;
+    }
 
     // Display the menu header
     displaySetFont(FONT_HEADER);

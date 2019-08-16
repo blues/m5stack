@@ -8,10 +8,10 @@
 // The main menu MUST be the first entry, but the order of all others is arbitrary
 // so long as these IDs exactly match the index of the entries in the table below.
 #define MAIN_MENU       0
-#define SETUP_MENU		1
-#define NOTECARD_MENU	2
-#define GPS_MENU		3
-#define HIDDEN_MENU		4
+#define SETUP_MENU      1
+#define NOTECARD_MENU   2
+#define GPS_MENU        3
+#define HIDDEN_MENU     4
 
 static MENU menu[] = {
     { MAIN_MENU, MAIN_MENU, "Options",
@@ -75,12 +75,12 @@ static int menuPress(int buttonState) {
         case BUTTON_PRESSED_U:
         case BUTTON_PRESSED_D:
         case BUTTON_PRESSED_S:
-			break;
+            break;
         case BUTTON_PRESSED_L:
             menuDeactivate();
-			break;
+            break;
         }
-	return 0;
+    return 0;
 }
 
 // Initialize the menu subsystem

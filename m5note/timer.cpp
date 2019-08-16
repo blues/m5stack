@@ -34,7 +34,7 @@ bool timerExpiredMs(uint32_t *timer, uint32_t periodMs) {
 // after boot and every wake.  This returns true if the specified interval has elapsed, in seconds,
 // and it updates the timer if it expires so that we will go another period.
 bool timerExpiredSecs(uint32_t *timer, uint32_t periodSecs) {
-	return timerExpiredMs(timer, periodSecs*1000);
+    return timerExpiredMs(timer, periodSecs*1000);
 }
 
 // Convert the specified Unix epoch time to an ISO 8601 formatted string in UTC
@@ -63,7 +63,7 @@ bool timeStringLocal(epoch secs, int offsetMins, char *zone, char *buf, int bufL
         *buf = '\0';
         return false;
     }
-	const char *days[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    const char *days[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     snprintf(buf, bufLen-1, "%s %02d:%02d %s", days[t->tm_wday], t->tm_hour, t->tm_min, zone);
     return true;
 }

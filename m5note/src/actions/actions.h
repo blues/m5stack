@@ -7,13 +7,13 @@
 #pragma once
 
 // These location modes correspond by design (with a few extensions) to card.location.mode
-#define LOCATION_INDOOR		"off"
-#define LOCATION_OUTDOOR	"motion"
-#define	LOCATION_MOBILE		"continuous"
-#define LOCATION_PERIODIC	"periodic"
-#define LOCATION_FIXED		"fixed"
-#define LOCATION_TRACK		"track"
-#define LOCATION_UNKNOWN	"unknown"
+#define LOCATION_INDOOR         "off"
+#define LOCATION_OUTDOOR        "motion"
+#define LOCATION_MOBILE         "continuous"
+#define LOCATION_PERIODIC       "periodic"
+#define LOCATION_FIXED          "fixed"
+#define LOCATION_TRACK          "track"
+#define LOCATION_UNKNOWN        "unknown"
 
 //
 // The various actions in their respective files

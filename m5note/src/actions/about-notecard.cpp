@@ -21,23 +21,23 @@ int actionAboutNotecard(int buttonState) {
     // Display the notecard config and version
     displayClear();
     displayCenteredBegin(FONT_TINY);
-	char iccid[64] = {0};
+    char iccid[64] = {0};
     J *rsp = NoteRequestResponse(NoteNewRequest("card.version"));
     if (rsp != NULL) {
-		displayCentered(JGetString(rsp, "name"));
-		displayCentered(JGetString(rsp, "version"));
-		char *wireless = JGetString(rsp, "wireless");
-		char *comma = strchr(wireless, ',');
-		if (comma != NULL) {
-			const char *prefix = "iccid:";
-			int prefixLen = strlen(prefix);
-			int len = comma - wireless;
-			if (len > sizeof(iccid)-prefixLen-1)
-				len = sizeof(iccid)-prefixLen-1;
-			strlcpy(iccid, prefix, sizeof(iccid));
-			memcpy(&iccid[prefixLen], wireless, len);
-			iccid[prefixLen+len] = '\0';
-		}
+        displayCentered(JGetString(rsp, "name"));
+        displayCentered(JGetString(rsp, "version"));
+        char *wireless = JGetString(rsp, "wireless");
+        char *comma = strchr(wireless, ',');
+        if (comma != NULL) {
+            const char *prefix = "iccid:";
+            int prefixLen = strlen(prefix);
+            int len = comma - wireless;
+            if (len > sizeof(iccid)-prefixLen-1)
+                len = sizeof(iccid)-prefixLen-1;
+            strlcpy(iccid, prefix, sizeof(iccid));
+            memcpy(&iccid[prefixLen], wireless, len);
+            iccid[prefixLen+len] = '\0';
+        }
         NoteDeleteResponse(rsp);
     }
     char prod[64], svc[64], device[64], sn[64];
@@ -53,8 +53,8 @@ int actionAboutNotecard(int buttonState) {
     } else {
         displayCentered("(Notecard is busy)");
     }
-	if (iccid[0] != '\0')
-		displayCentered(iccid);
+    if (iccid[0] != '\0')
+        displayCentered(iccid);
     displayCenteredEnd();
 
     // Capture button input
