@@ -1,7 +1,7 @@
 # Contributing to blues/m5stack
 
 We love pull requests from everyone. By participating in this project, you
-agree to abide by the Notarize [code of conduct].
+agree to abide by the Blues Inc [code of conduct].
 
 [code of conduct]: https://blues.github.io/opensource/code-of-conduct
 
