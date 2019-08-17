@@ -28,7 +28,7 @@ clean up inconsistent whitespace )
   already been submitted.
 * When submitting a bug report, please include a [Gist][] that includes a stack
   trace and any details that may be necessary to reproduce the bug, including
-  your gem version, Ruby version, and operating system.  Ideally, a bug report
+  your release version, board version, and operating system. Ideally, a bug report
   should include a pull request with failing specs.
 
 [gist]: https://gist.github.com/
