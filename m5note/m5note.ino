@@ -15,7 +15,7 @@ void setup() {
     // Set up for debug output.  If you open Arduino's serial terminal window, you'll be able to
     // watch JSON objects being transferred to and from the Notecard for each request.
     Serial.begin(115200);
-    NoteSetDebugOutputPort(&Serial);
+    NoteSetDebugOutputStream(Serial);
 
     // Set I2C as the port we'll use for the Notecard
     NoteInitI2C();
