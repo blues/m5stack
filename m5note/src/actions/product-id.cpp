@@ -28,10 +28,7 @@ int actionSetProductID(int buttonState) {
     displayClear();
     displayCenteredBegin(FONT_TINY);
     if (NOTEHUB_WEBSITE[0] != '\0') {
-        displayCentered("By using a " NOTEHUB_WEBSITE " account");
-        displayCentered("email@address.com, data will flow to");
-        displayCentered("your " NOTEHUB_WEBSITE " Personal Project." );
-        displayCentered("Otherwise, enter a Product ID from");
+        displayCentered("Please enter a Product ID from");
         displayCentered("your " NOTEHUB_WEBSITE " Project's Settings." );
         displayCentered("");
         displayCentered("continue >");
