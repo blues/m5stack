@@ -56,7 +56,7 @@ bool timeString(uint32_t secs, char *buf, int bufLen) {
 }
 
 // Convert the specified Unix epoch time to a local string, in an abbreviated manner
-bool timeStringLocal(epoch secs, int offsetMins, char *zone, char *buf, int bufLen) {
+bool timeStringLocal(JTIME secs, int offsetMins, char *zone, char *buf, int bufLen) {
     time_t timeNowSecs = secs + (offsetMins*60);;
     struct tm *t = gmtime(&timeNowSecs);
     if (t == NULL) {

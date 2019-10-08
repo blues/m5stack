@@ -113,7 +113,7 @@ int homeScreen(int buttonState) {
     // Status of the GPS
     double lat, lon;
     char locStatus[MAXTEXT];
-    epoch time;
+    JTIME time;
     bool locValid = NoteGetLocation(&lat, &lon, &time, locStatus, sizeof(locStatus));
     if (!locValid)
         displayCentered(locStatus);
