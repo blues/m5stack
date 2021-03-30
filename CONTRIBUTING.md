@@ -18,7 +18,7 @@ clean up inconsistent whitespace )
 * by closing [issues][]
 * by reviewing patches
 
-[issues]: https://blues.github.com/m5stack/issues
+[issues]: https://github.com/blues/m5stack/issues
 
 ## Submitting an Issue
 
